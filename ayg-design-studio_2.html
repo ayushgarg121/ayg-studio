@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AYG Design Studio — Architecture · Interiors · Planning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#111111;
+    --graphite:#1a1a1a;
+    --graphite-2:#222222;
+    --stone:#767676;
+    --stone-on-dark:#b4b4b4;
+    --stone-dim:#555555;
+    --ivory:#ffffff;
+    --white:#ffffff;
+    --concrete:#ffffff;
+    --concrete-2:#ededed;
+    --surface-alt:#f4f4f4;
+    --accent:#111111;
+    --accent-on-dark:#ffffff;
+    --logo-font:'Century Gothic','Questrial','Jost','Avenir Next',sans-serif;
+    --line-on-dark:rgba(255,255,255,0.16);
+    --line-on-light:rgba(17,17,17,0.12);
+    --max:1440px;
+    --gutter:clamp(24px,5vw,80px);
+    --section-pad:clamp(72px,9vw,148px);
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{animation-duration:0.01ms !important;transition-duration:0.01ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--ivory);
+    color:var(--charcoal);
+    font-family:'Century Gothic','Jost','Avenir Next',sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+    font-size:16px;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;cursor:pointer;}
+
+  .wrap{max-width:var(--max);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter);}
+
+  h1,h2,h3,h4{margin:0;font-weight:300;letter-spacing:0.01em;}
+
+  /* section headings: bold + larger */
+  .section-head h2,
+  .studio-heading,
+  .contact-left h2{
+    font-weight:700;
+    letter-spacing:-0.005em;
+    line-height:1.06;
+  }
+
+  .eyebrow-label{
+    font-size:0.72rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--stone);
+    font-weight:500;
+  }
+
+  .team .eyebrow-label,
+  .stats .eyebrow-label,
+  .testimonials .eyebrow-label{color:var(--stone-on-dark);}
+
+  .hairline{border:none;border-top:1px solid var(--line-on-light);margin:0;}
+  .hairline.on-dark{border-top-color:var(--line-on-dark);}
+
+  /* ---------- reveal-on-scroll ---------- */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity 0.9s var(--ease),transform 0.9s var(--ease);}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+  .reveal-delay-1.in-view{transition-delay:0.08s;}
+  .reveal-delay-2.in-view{transition-delay:0.16s;}
+  .reveal-delay-3.in-view{transition-delay:0.24s;}
+  .reveal-delay-4.in-view{transition-delay:0.32s;}
+
+  /* ---------- corner-mark signature motif ---------- */
+  .frame-marks{position:relative;}
+  .frame-marks::before,.frame-marks::after{
+    content:'';position:absolute;width:26px;height:26px;
+    border-color:rgba(255,255,255,0.9);pointer-events:none;
+  }
+  .frame-marks::before{top:14px;left:14px;border-top:1px solid;border-left:1px solid;}
+  .frame-marks::after{bottom:14px;right:14px;border-bottom:1px solid;border-right:1px solid;}
+
+  .btn-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--ivory);color:var(--charcoal);
+    padding:16px 30px;
+    font-size:0.78rem;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;
+    border:1px solid var(--ivory);
+    transition:background 0.4s var(--ease),color 0.4s var(--ease);
+  }
+  .btn-primary:hover{background:transparent;color:var(--ivory);}
+  .btn-primary .arrow{transition:transform 0.4s var(--ease);}
+  .btn-primary:hover .arrow{transform:translateX(4px);}
+
+  .btn-outline{
+    display:inline-block;
+    padding:15px 28px;
+    font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:500;
+    border:1px solid var(--line-on-light);color:var(--charcoal);
+    transition:border-color 0.35s var(--ease),color 0.35s var(--ease);
+    background:transparent;
+  }
+  .btn-outline:hover{border-color:var(--charcoal);}
+  .btn-outline.on-dark{border-color:var(--line-on-dark);color:var(--ivory);}
+  .btn-outline.on-dark:hover{border-color:var(--ivory);}
+
+  /* ================= NAV ================= */
+  header.site-nav{
+    position:fixed;top:0;left:0;right:0;z-index:500;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:26px var(--gutter);
+    color:var(--ivory);
+    transition:background 0.5s var(--ease),padding 0.4s var(--ease);
+  }
+  header.site-nav.scrolled{
+    background:rgba(17,17,17,0.92);
+    backdrop-filter:blur(6px);
+    padding-top:16px;padding-bottom:16px;
+    border-bottom:1px solid var(--line-on-dark);
+  }
+  /* ---------- AYG logo (crossbar-less A + fitted wordmark, one SVG) ---------- */
+  .ayg-mark{display:block;width:auto;height:44px;color:currentColor;overflow:visible;}
+  .ayg-mark .ayg-word{
+    font-family:var(--logo-font);
+    font-weight:400;
+    text-transform:lowercase;
+  }
+  .ayg-tagline{
+    font-family:var(--logo-font);
+    font-size:0.62rem;letter-spacing:0.2em;margin-top:20px;
+    color:var(--stone-on-dark);white-space:nowrap;
+  }
+  .brand-mark{display:flex;align-items:center;}
+  .brand-mark .ayg-mark{height:40px;}
+
+  nav.primary-links{display:flex;gap:38px;}
+  nav.primary-links a{
+    font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:500;
+    position:relative;padding-bottom:4px;
+  }
+  nav.primary-links a::after{
+    content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;
+    background:var(--accent-on-dark);transform:scaleX(0);transform-origin:left;
+    transition:transform 0.35s var(--ease);
+  }
+  nav.primary-links a:hover::after{transform:scaleX(1);}
+
+  .nav-cta{display:none;}
+  @media (min-width:901px){.nav-cta{display:inline-block;}}
+
+  .menu-toggle{
+    display:none;flex-direction:column;gap:5px;background:none;border:none;padding:6px;
+  }
+  .menu-toggle span{width:24px;height:1px;background:var(--ivory);display:block;transition:transform 0.35s var(--ease),opacity 0.35s var(--ease);}
+  .menu-toggle.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+  .menu-toggle.open span:nth-child(2){opacity:0;}
+  .menu-toggle.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
+  @media (max-width:900px){
+    nav.primary-links{display:none;}
+    .menu-toggle{display:flex;}
+  }
+
+  .mobile-panel{
+    position:fixed;inset:0;background:var(--charcoal);z-index:600;
+    display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+    padding:0 var(--gutter);
+    transform:translateY(-100%);opacity:0;
+    transition:transform 0.5s var(--ease),opacity 0.5s var(--ease);
+    pointer-events:none;
+  }
+  .mobile-panel.open{transform:translateY(0);opacity:1;pointer-events:auto;}
+  .mobile-panel a{
+    color:var(--white);font-size:2rem;font-weight:300;padding:14px 0;
+    border-bottom:1px solid var(--line-on-dark);width:100%;
+  }
+
+  /* ================= HERO ================= */
+  .hero{
+    position:relative;height:100vh;min-height:640px;
+    display:flex;flex-direction:column;justify-content:flex-end;
+    overflow:hidden;
+    background-color:#0d0d0d;
+  }
+  .hero-media{
+    position:absolute;inset:-6% -6% -6% -6%;
+    background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=75');
+    background-size:cover;background-position:center;
+    filter:saturate(0.85) brightness(0.46);
+    will-change:transform;
+  }
+  .hero::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(8,8,8,0.62) 0%,rgba(8,8,8,0.28) 28%,rgba(8,8,8,0.62) 68%,rgba(8,8,8,0.92) 100%);
+  }
+  .hero-content{position:relative;z-index:2;color:var(--white);padding:0 var(--gutter) clamp(56px,9vw,110px);}
+  .hero-content h1{
+    font-size:clamp(2.6rem,6vw,5.4rem);
+    font-weight:600;max-width:15ch;line-height:1.04;letter-spacing:-0.01em;
+    color:#fff;text-shadow:0 2px 30px rgba(0,0,0,0.55);
+  }
+  .hero-content .hero-sub{
+    margin-top:26px;max-width:44ch;color:rgba(255,255,255,0.94);
+    font-size:clamp(0.95rem,1.1vw,1.1rem);font-weight:300;
+    text-shadow:0 1px 18px rgba(0,0,0,0.6);
+  }
+  .hero-bottom-row{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:24px;margin-top:44px;flex-wrap:wrap;
+  }
+  .hero-tagline{
+    font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.8);
+    max-width:26ch;text-shadow:0 1px 14px rgba(0,0,0,0.6);
+  }
+
+  /* ================= STUDIO / ABOUT ================= */
+  .studio{padding:var(--section-pad) 0;background:var(--ivory);}
+  .studio-grid{
+    display:grid;grid-template-columns:1.15fr 0.85fr;gap:clamp(30px,6vw,90px);
+    align-items:start;
+  }
+  .studio-grid .col-text{padding-top:6px;}
+  .studio-heading{font-size:clamp(2.3rem,4.4vw,3.9rem);max-width:13ch;}
+  .studio-quote{
+    margin:40px 0 34px;padding-left:26px;border-left:1px solid var(--accent);
+    font-size:clamp(1.1rem,1.7vw,1.4rem);font-weight:300;font-style:normal;
+    color:var(--charcoal);max-width:34ch;line-height:1.5;
+  }
+  .studio-body{color:var(--stone-dim);max-width:46ch;font-size:0.98rem;}
+  .studio-signoff{margin-top:34px;display:flex;gap:16px;align-items:center;}
+  .studio-signoff .name{font-size:0.85rem;letter-spacing:0.04em;}
+  .studio-signoff .role{font-size:0.72rem;color:var(--stone);letter-spacing:0.06em;}
+
+  .studio-media{position:relative;}
+  .studio-media .img-panel{
+    aspect-ratio:4/5;
+    background-color:#ececec;
+    background-image:url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=75');
+    background-size:cover;background-position:center;
+  }
+  .studio-media-caption{
+    display:flex;justify-content:space-between;margin-top:16px;
+    font-size:0.7rem;letter-spacing:0.1em;color:var(--stone);text-transform:uppercase;
+  }
+
+  /* ================= PROJECTS ================= */
+  .projects{padding:var(--section-pad) 0;background:var(--concrete);}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+    margin-bottom:clamp(40px,6vw,72px);flex-wrap:wrap;
+  }
+  .section-head h2{font-size:clamp(2.5rem,5vw,4.4rem);max-width:14ch;}
+  .section-head p{max-width:36ch;color:var(--stone-dim);font-size:0.95rem;margin-top:6px;}
+  .category-pills{display:flex;flex-wrap:wrap;gap:10px;}
+  .category-pills span{
+    font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
+    padding:8px 14px;border:1px solid var(--line-on-light);color:var(--stone-dim);
+    background:var(--white);
+  }
+
+  .project-block{
+    display:grid;grid-template-columns:1fr;
+    margin-bottom:clamp(28px,4vw,44px);
+  }
+  .project-block:last-child{margin-bottom:0;}
+  .project-media{
+    position:relative;aspect-ratio:16/8.6;background-color:#1b1b1b;background-size:cover;background-position:center;
+    filter:saturate(0.92) brightness(0.72);
+  }
+  .project-media .meta-top{
+    position:absolute;top:26px;left:26px;right:26px;z-index:2;
+    display:flex;justify-content:space-between;color:#fff;
+    font-size:0.74rem;letter-spacing:0.1em;text-transform:none;font-weight:500;
+    text-shadow:0 1px 3px rgba(0,0,0,0.95),0 2px 18px rgba(0,0,0,0.9);
+  }
+  .project-media .meta-top .tags span{margin-right:14px;color:#fff;}
+  .project-media::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.3) 22%,rgba(0,0,0,0.42) 48%,rgba(0,0,0,0.82) 78%,rgba(0,0,0,0.97) 100%);
+  }
+  .project-media .bottom-text{
+    position:absolute;left:26px;right:26px;bottom:24px;z-index:2;color:#fff;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;
+  }
+  .project-media .bottom-text h3{
+    font-size:clamp(1.6rem,3vw,2.5rem);font-weight:600;color:#fff;
+    letter-spacing:-0.005em;
+    text-shadow:0 2px 4px rgba(0,0,0,0.9),0 4px 30px rgba(0,0,0,0.85);
+  }
+  .project-media .bottom-text .desc{
+    max-width:42ch;color:#fff;font-size:0.94rem;margin-top:10px;font-weight:400;
+    text-shadow:0 1px 3px rgba(0,0,0,0.95),0 2px 20px rgba(0,0,0,0.85);
+  }
+  .project-media .view-link{
+    font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:#fff;font-weight:500;
+    border-bottom:1px solid #fff;padding-bottom:3px;white-space:nowrap;
+    text-shadow:0 1px 3px rgba(0,0,0,0.95);
+  }
+
+  /* ================= SERVICES ================= */
+  .services{padding:var(--section-pad) 0;background:var(--ivory);}
+  .services-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--line-on-light);border-left:1px solid var(--line-on-light);
+  }
+  .service-card{
+    border-right:1px solid var(--line-on-light);border-bottom:1px solid var(--line-on-light);
+    padding:clamp(30px,3vw,44px) clamp(26px,3vw,38px);
+    min-height:230px;display:flex;flex-direction:column;justify-content:space-between;
+    transition:background 0.4s var(--ease);
+  }
+  .service-card:hover{background:var(--surface-alt);}
+  .service-card .icon{width:30px;height:30px;color:var(--accent);}
+  .service-card h3{font-size:1.15rem;font-weight:400;margin-top:26px;}
+  .service-card p{font-size:0.88rem;color:var(--stone-dim);margin-top:10px;line-height:1.55;}
+
+  @media (max-width:860px){
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:560px){
+    .services-grid{grid-template-columns:1fr;}
+  }
+
+  /* ================= TEAM ================= */
+  .team{padding:var(--section-pad) 0;background:var(--graphite);color:var(--white);}
+  .team .section-head h2{color:var(--white);}
+  .team .section-head p{color:var(--stone-on-dark);}
+  .team-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,2.6vw,36px);
+    border-top:1px solid var(--line-on-dark);padding-top:clamp(34px,4vw,54px);
+  }
+  .team-photo{
+    aspect-ratio:3/4;background-color:#262626;background-size:cover;background-position:center;
+    border:1px solid var(--line-on-dark);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
+  }
+  .team-photo .monogram{
+    font-family:var(--logo-font);font-size:1.5rem;letter-spacing:0.2em;
+    color:rgba(255,255,255,0.4);
+  }
+  .team-card h3{font-size:1.1rem;font-weight:500;margin-top:22px;color:var(--white);}
+  .team-card .role{
+    font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--stone-on-dark);margin-top:9px;
+  }
+  .team-card p{color:var(--stone-on-dark);font-size:0.87rem;margin-top:14px;line-height:1.55;}
+  @media (max-width:900px){.team-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.team-grid{grid-template-columns:1fr;}}
+
+  /* ================= STATS ================= */
+  .stats{
+    position:relative;padding:var(--section-pad) 0;background:var(--charcoal);color:var(--ivory);
+    overflow:hidden;
+  }
+  .stats-grid-lines{
+    position:absolute;inset:0;opacity:0.5;
+    background-image:
+      repeating-linear-gradient(90deg,var(--line-on-dark) 0 1px,transparent 1px 120px),
+      repeating-linear-gradient(0deg,var(--line-on-dark) 0 1px,transparent 1px 120px);
+  }
+  .stats-inner{position:relative;z-index:2;}
+  .stats-row{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:40px;
+    border-top:1px solid var(--line-on-dark);padding-top:44px;margin-top:20px;
+  }
+  .stat{}
+  .stat .num{font-size:clamp(2.6rem,5vw,4.2rem);font-weight:200;color:var(--white);}
+  .stat .num::after{content:'';display:block;width:44px;height:1px;background:var(--accent-on-dark);margin:18px 0 16px;}
+  .stat .label{font-size:0.78rem;letter-spacing:0.08em;color:var(--stone-on-dark);max-width:20ch;}
+  @media (max-width:700px){.stats-row{grid-template-columns:1fr;gap:32px;}}
+
+  /* ================= TESTIMONIALS ================= */
+  .testimonials{padding:var(--section-pad) 0;background:var(--graphite-2);color:var(--ivory);}
+  .quote-mark{font-size:5.5rem;line-height:1;color:rgba(255,255,255,0.5);font-weight:200;}
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(30px,4vw,54px);margin-top:8px;}
+  .testi-card p.quote{font-size:1.02rem;font-weight:300;line-height:1.6;max-width:36ch;color:rgba(255,255,255,0.92);}
+  .testi-card .attribution{margin-top:22px;font-size:0.74rem;letter-spacing:0.06em;color:var(--stone-on-dark);}
+  @media (max-width:860px){.testi-grid{grid-template-columns:1fr;}}
+
+  /* ================= CONTACT ================= */
+  .contact{padding:var(--section-pad) 0;background:var(--ivory);}
+  .contact-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(40px,6vw,90px);}
+  .contact-left h2{font-size:clamp(2.4rem,4.8vw,4.1rem);max-width:11ch;}
+  .contact-left p{color:var(--stone-dim);max-width:38ch;margin-top:22px;font-size:0.98rem;}
+  .contact-details{margin-top:44px;}
+  .contact-details .row{display:flex;flex-direction:column;padding:16px 0;border-top:1px solid var(--line-on-light);}
+  .contact-details .row:last-child{border-bottom:1px solid var(--line-on-light);}
+  .contact-details .row .k{font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);}
+  .contact-details .row .v{font-size:0.98rem;margin-top:6px;}
+
+  .field{position:relative;margin-bottom:30px;}
+  .field label{
+    display:block;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--stone);margin-bottom:10px;
+  }
+  .field input,.field select,.field textarea{
+    width:100%;border:none;border-bottom:1px solid var(--line-on-light);
+    background:transparent;padding:10px 2px;font-family:inherit;font-size:1rem;color:var(--charcoal);
+    transition:border-color 0.3s var(--ease);
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{
+    outline:none;border-color:var(--charcoal);
+  }
+  .field textarea{resize:vertical;min-height:90px;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:0 30px;}
+  @media (max-width:520px){.two-col{grid-template-columns:1fr;}}
+  .contact-grid form .btn-primary{margin-top:6px;background:var(--charcoal);color:var(--ivory);border-color:var(--charcoal);}
+  .contact-grid form .btn-primary:hover{background:transparent;color:var(--charcoal);}
+  .form-success{display:none;padding:40px 0;font-size:1.1rem;max-width:32ch;}
+  .form-success.show{display:block;}
+  .contact-form.hide{display:none;}
+
+  @media (max-width:900px){
+    .studio-grid,.contact-grid{grid-template-columns:1fr;}
+    .studio-media{order:-1;}
+  }
+
+  /* ================= FOOTER ================= */
+  footer{background:var(--charcoal);color:var(--ivory);padding-top:var(--section-pad);}
+  .footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:60px;}
+  .footer-brand .ayg-mark{height:82px;}
+  .footer-brand p{margin-top:24px;color:var(--stone-on-dark);max-width:32ch;font-size:0.9rem;}
+  .footer-col h4{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone-on-dark);margin-bottom:18px;}
+  .footer-col a,.footer-col p{display:block;font-size:0.92rem;color:var(--concrete-2);margin-bottom:10px;}
+  .footer-col a:hover{color:var(--white);}
+  .social-row{display:flex;gap:16px;margin-top:20px;}
+  .social-row a{
+    width:36px;height:36px;border:1px solid var(--line-on-dark);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:0.72rem;
+    transition:border-color 0.3s var(--ease),color 0.3s var(--ease);
+  }
+  .social-row a:hover{border-color:var(--white);color:var(--white);}
+  .footer-bottom{
+    border-top:1px solid var(--line-on-dark);padding:26px 0;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-size:0.75rem;color:var(--stone-on-dark);
+  }
+  @media (max-width:860px){
+    .footer-top{grid-template-columns:1fr 1fr;}
+    .footer-brand{grid-column:1 / -1;}
+  }
+  @media (max-width:520px){
+    .footer-top{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="site-nav" id="siteNav">
+  <a href="#top" class="brand-mark" aria-label="AYG Design Studio">
+    <svg class="ayg-mark" viewBox="0 0 283 162" role="img" aria-label="AYG design studio">
+      <g fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="miter" stroke-miterlimit="14">
+        <path d="M8 110 L49.8 14 L91.5 110"/>
+        <path d="M89.7 14 L124.7 66 L159.7 14"/>
+        <path d="M124.7 66 L124.7 110"/>
+        <path d="M274.3 62 A50.5 50.5 0 1 1 256.3 24.3"/>
+        <path d="M222 62 L274.3 62"/>
+      </g>
+      <text class="ayg-word" x="4.5" y="146" textLength="273.3" lengthAdjust="spacing"
+            fill="currentColor" font-size="31">design studio</text>
+    </svg>
+  </a>
+  <nav class="primary-links">
+    <a href="#top">Home</a>
+    <a href="#studio">Studio</a>
+    <a href="#projects">Projects</a>
+    <a href="#services">Services</a>
+    <a href="#team">Team</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a href="#contact" class="btn-outline on-dark nav-cta">Start a Project</a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="mobile-panel" id="mobilePanel">
+  <a href="#top">Home</a>
+  <a href="#studio">Studio</a>
+  <a href="#projects">Projects</a>
+  <a href="#services">Services</a>
+  <a href="#team">Team</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="hero-media" id="heroMedia"></div>
+  <div class="hero-content">
+    <h1>Spaces designed to be lived in slowly.</h1>
+    <div class="hero-bottom-row">
+      <p class="hero-sub">AYG Design Studio creates timeless architecture, interiors and considered spaces across Punjab &mdash; led end to end by Ar. Ayush Garg.</p>
+      <a href="#projects" class="btn-primary">Explore Projects <span class="arrow">&#8594;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STUDIO ================= -->
+<section class="studio" id="studio">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow-label">Studio</span>
+    </div>
+    <div class="studio-grid">
+      <div class="col-text reveal">
+        <h2 class="studio-heading">A studio built around one architect's attention.</h2>
+        <p class="studio-quote">&ldquo;Architecture is not just about creating spaces. It is about shaping experiences, emotions and lifestyles.&rdquo;</p>
+        <p class="studio-body">AYG Design Studio works across residential architecture, interiors, space planning and construction &mdash; each project carried from first sketch to final handover by a single, principal-led team. Based in Barnala, Punjab, the studio takes on a deliberately small number of projects at a time, so that every drawing, material choice and site visit gets the attention it deserves.</p>
+        <div class="studio-signoff">
+          <div>
+            <div class="name">Ar. Ayush Garg</div>
+            <div class="role">Principal Architect, B.Arch</div>
+          </div>
+        </div>
+      </div>
+      <div class="studio-media reveal reveal-delay-2">
+        <div class="img-panel frame-marks"></div>
+        <div class="studio-media-caption">
+          <span>Site &amp; Studio</span>
+          <span>Barnala, Punjab</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section class="projects" id="projects">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow-label">Selected Work</span>
+        <h2 style="margin-top:14px;">Featured Projects</h2>
+        <p>A studio-wide view across residential, interior, commercial and hospitality work, all designed and delivered in-house.</p>
+      </div>
+      <div class="category-pills">
+        <span>Residential</span>
+        <span>Interiors</span>
+        <span>Commercial</span>
+        <span>Renovation</span>
+        <span>Hospitality</span>
+      </div>
+    </div>
+
+    <div class="project-block reveal">
+      <div class="project-media frame-marks" style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=75');">
+        <div class="meta-top">
+          <span>01</span>
+          <div class="tags"><span>Barnala, Punjab</span><span>Residential Architecture</span><span>2025</span></div>
+        </div>
+        <div class="bottom-text">
+          <div>
+            <h3>The Courtyard House</h3>
+            <p class="desc">A single-storey home organised around a shaded central courtyard, framed in exposed concrete and teak.</p>
+          </div>
+          <span class="view-link">View Project</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-block reveal">
+      <div class="project-media frame-marks" style="background-image:url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=75');">
+        <div class="meta-top">
+          <span>02</span>
+          <div class="tags"><span>Ludhiana, Punjab</span><span>Luxury Interiors</span><span>2025</span></div>
+        </div>
+        <div class="bottom-text">
+          <div>
+            <h3>Linear Loft Interiors</h3>
+            <p class="desc">An apartment interior composed around one continuous run of walnut joinery, from entry to bedroom.</p>
+          </div>
+          <span class="view-link">View Project</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-block reveal">
+      <div class="project-media frame-marks" style="background-image:url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=1600&q=75');">
+        <div class="meta-top">
+          <span>03</span>
+          <div class="tags"><span>Barnala, Punjab</span><span>Commercial Spaces</span><span>2023</span></div>
+        </div>
+        <div class="bottom-text">
+          <div>
+            <h3>Sidana Street Offices</h3>
+            <p class="desc">A compact professional office fit-out designed for calm, considered client meetings.</p>
+          </div>
+          <span class="view-link">View Project</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-block reveal">
+      <div class="project-media frame-marks" style="background-image:url('https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1600&q=75');">
+        <div class="meta-top">
+          <span>04</span>
+          <div class="tags"><span>Malwa Region, Punjab</span><span>Hospitality Design</span><span>2024</span></div>
+        </div>
+        <div class="bottom-text">
+          <div>
+            <h3>The Orchard Retreat</h3>
+            <p class="desc">A small guesthouse set low among mature trees, built to disappear into its own site.</p>
+          </div>
+          <span class="view-link">View Project</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow-label">What We Do</span>
+        <h2 style="margin-top:14px;">Services</h2>
+      </div>
+      <p>One studio, six disciplines, held under a single point of contact.</p>
+    </div>
+  </div>
+  <div class="wrap" style="padding:0;">
+    <div class="services-grid reveal">
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1"><rect x="5" y="5" width="16" height="16"/><circle cx="21" cy="21" r="6"/></svg>
+        <div>
+          <h3>Architecture Design</h3>
+          <p>Considered floor plans and elevations rooted in site, light and the way you actually live.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1"><rect x="4" y="6" width="24" height="20"/><path d="M4 14h24M12 14v12"/></svg>
+        <div>
+          <h3>Interior Design</h3>
+          <p>Material palettes, joinery and furniture layouts composed as one continuous language.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M4 4h24v24H4z"/><path d="M4 12h24M4 20h24M12 4v24M20 4v24"/></svg>
+        <div>
+          <h3>Space Planning</h3>
+          <p>Vastu-conscious layouts that balance function, flow and traditional principles.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M6 26V14l10-8 10 8v12"/><path d="M12 26v-8h8v8"/></svg>
+        <div>
+          <h3>Construction Management</h3>
+          <p>On-site supervision from foundation to finish, holding every trade to the drawing.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M16 4l12 6v12l-12 6-12-6V10z"/><path d="M4 10l12 6 12-6M16 16v12"/></svg>
+        <div>
+          <h3>3D Visualization</h3>
+          <p>Photoreal walkthroughs so every decision is made with confidence, before a wall is built.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1"><circle cx="11" cy="11" r="6"/><path d="M15.5 15.5L28 28M22 22l4-4"/></svg>
+        <div>
+          <h3>Turnkey Solutions</h3>
+          <p>One studio, one team, one point of contact from concept through to handover.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TEAM ================= -->
+<section class="team" id="team">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow-label">Who You Work With</span>
+        <h2 style="margin-top:14px;">The Team</h2>
+      </div>
+      <p>A deliberately small studio &mdash; the person who draws your home is the person you meet, and the person on site.</p>
+    </div>
+
+    <div class="team-grid reveal">
+      <article class="team-card">
+        <!-- To use a real photo: style="background-image:url('images/ayush.jpg')" -->
+        <div class="team-photo"><span class="monogram">AG</span></div>
+        <h3>Ar. Ayush Garg</h3>
+        <div class="role">Principal Architect &middot; B.Arch</div>
+        <p>Leads every project end to end &mdash; brief, design, drawings and site &mdash; from the studio in Barnala.</p>
+      </article>
+
+      <!-- ===== TEAM MEMBER 2 — replace name, role and text ===== -->
+      <article class="team-card">
+        <div class="team-photo"><span class="monogram">&mdash;</span></div>
+        <h3>Team Member Name</h3>
+        <div class="role">Senior Architect</div>
+        <p>Add a short line here about what this person owns on a project.</p>
+      </article>
+
+      <!-- ===== TEAM MEMBER 3 — replace name, role and text ===== -->
+      <article class="team-card">
+        <div class="team-photo"><span class="monogram">&mdash;</span></div>
+        <h3>Team Member Name</h3>
+        <div class="role">Interior Designer</div>
+        <p>Add a short line here about what this person owns on a project.</p>
+      </article>
+
+      <!-- ===== TEAM MEMBER 4 — replace name, role and text ===== -->
+      <article class="team-card">
+        <div class="team-photo"><span class="monogram">&mdash;</span></div>
+        <h3>Team Member Name</h3>
+        <div class="role">Site &amp; Execution Lead</div>
+        <p>Add a short line here about what this person owns on a project.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<section class="stats">
+  <div class="stats-grid-lines"></div>
+  <div class="wrap stats-inner">
+    <span class="eyebrow-label reveal">Why AYG</span>
+    <div class="stats-row reveal">
+      <div class="stat">
+        <div class="num" data-count="15" data-suffix="+">0</div>
+        <div class="label">Projects completed across Punjab</div>
+      </div>
+      <div class="stat">
+        <div class="num" data-count="10" data-suffix="+">0</div>
+        <div class="label">Design categories, one studio</div>
+      </div>
+      <div class="stat">
+        <div class="num" data-count="100" data-suffix="%">0</div>
+        <div class="label">Client commitment, every project</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="testimonials">
+  <div class="wrap">
+    <span class="eyebrow-label reveal">Client Notes</span>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote">Every detail felt considered before we even asked the question. Our home now feels larger, quieter and entirely our own.</p>
+        <div class="attribution">Private Residence &middot; Barnala</div>
+      </div>
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote">AYG turned a difficult, awkward site into the best room in our house. We still notice something new in the light every week.</p>
+        <div class="attribution">Homeowner &middot; Ludhiana</div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote">Professional, precise and unhurried. They treated our office like it was their own building.</p>
+        <div class="attribution">Commercial Client &middot; Barnala</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div class="contact-left reveal">
+        <span class="eyebrow-label">Get In Touch</span>
+        <h2 style="margin-top:14px;">Let&rsquo;s create your next space.</h2>
+        <p>Tell us a little about your site and what you have in mind. We reply to every enquiry within one working day.</p>
+
+        <div class="contact-details">
+          <div class="row"><span class="k">Phone</span><span class="v">+91 92179 71324 &nbsp;&middot;&nbsp; +91 94640 01404</span></div>
+          <div class="row"><span class="k">Email</span><span class="v">info.aygdesignstudio@gmail.com</span></div>
+          <div class="row"><span class="k">Studio</span><span class="v">Opposite UCO Bank, Sidana Street, Barnala, Punjab 148101</span></div>
+          <div class="row"><span class="k">Web</span><span class="v">www.aygdesignstudio.com</span></div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-2">
+        <form class="contact-form" id="contactForm">
+          <div class="two-col">
+            <div class="field">
+              <label for="fname">Name</label>
+              <input id="fname" type="text" required placeholder="Your full name">
+            </div>
+            <div class="field">
+              <label for="fphone">Phone</label>
+              <input id="fphone" type="tel" required placeholder="+91">
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label for="femail">Email</label>
+              <input id="femail" type="email" required placeholder="you@email.com">
+            </div>
+            <div class="field">
+              <label for="ftype">Project Type</label>
+              <select id="ftype">
+                <option>Residential Architecture</option>
+                <option>Luxury Interiors</option>
+                <option>Commercial Spaces</option>
+                <option>Renovation</option>
+                <option>Hospitality Design</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="fmsg">Message</label>
+            <textarea id="fmsg" placeholder="Tell us about your site, timeline and what you're hoping to build."></textarea>
+          </div>
+          <button type="submit" class="btn-primary">Send Message <span class="arrow">&#8594;</span></button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          Thank you &mdash; your message has reached the studio. We&rsquo;ll be in touch within one working day.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <svg class="ayg-mark" viewBox="0 0 283 162" role="img" aria-label="AYG design studio">
+      <g fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="miter" stroke-miterlimit="14">
+        <path d="M8 110 L49.8 14 L91.5 110"/>
+        <path d="M89.7 14 L124.7 66 L159.7 14"/>
+        <path d="M124.7 66 L124.7 110"/>
+        <path d="M274.3 62 A50.5 50.5 0 1 1 256.3 24.3"/>
+        <path d="M222 62 L274.3 62"/>
+      </g>
+      <text class="ayg-word" x="4.5" y="146" textLength="273.3" lengthAdjust="spacing"
+            fill="currentColor" font-size="31">design studio</text>
+    </svg>
+        <div class="ayg-tagline">Architecture &nbsp;I&nbsp; Interiors</div>
+        <p>Architecture, interiors, planning and construction, led end to end from Barnala, Punjab.</p>
+        <div class="social-row">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="LinkedIn">IN</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Studio</h4>
+        <a href="#studio">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#services">Services</a>
+        <a href="#team">Team</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>+91 92179 71324</p>
+        <p>+91 94640 01404</p>
+        <p>info.aygdesignstudio@gmail.com</p>
+      </div>
+      <div class="footer-col">
+        <h4>Studio Address</h4>
+        <p>Opposite UCO Bank</p>
+        <p>Sidana Street, Barnala</p>
+        <p>Punjab 148101</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 AYG Design Studio. All rights reserved.</span>
+      <span>Architecture &nbsp;/&nbsp; Interiors &nbsp;/&nbsp; Planning &nbsp;/&nbsp; Vastu &nbsp;/&nbsp; Construction</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // nav background on scroll
+  const nav = document.getElementById('siteNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, {passive:true});
+
+  // mobile menu
+  const toggle = document.getElementById('menuToggle');
+  const panel = document.getElementById('mobilePanel');
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('open');
+    panel.classList.toggle('open');
+  });
+  panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    toggle.classList.remove('open');
+    panel.classList.remove('open');
+  }));
+
+  // scroll reveal
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealEls = document.querySelectorAll('.reveal');
+  if (reduceMotion) {
+    revealEls.forEach(el => el.classList.add('in-view'));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.15});
+    revealEls.forEach(el => io.observe(el));
+  }
+
+  // hero parallax
+  const heroMedia = document.getElementById('heroMedia');
+  if (!reduceMotion) {
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y < window.innerHeight) {
+        heroMedia.style.transform = `translateY(${y * 0.18}px)`;
+      }
+    }, {passive:true});
+  }
+
+  // stat counters
+  const stats = document.querySelectorAll('.stat .num');
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.count, 10);
+        const suffix = el.dataset.suffix || '';
+        const duration = 1400;
+        const start = performance.now();
+        function tick(now){
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        statObserver.unobserve(el);
+      }
+    });
+  }, {threshold:0.4});
+  stats.forEach(el => statObserver.observe(el));
+
+  // contact form (no backend — front-end confirmation only)
+  const form = document.getElementById('contactForm');
+  const success = document.getElementById('formSuccess');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    form.classList.add('hide');
+    success.classList.add('show');
+  });
+</script>
+
+</body>
+</html>
